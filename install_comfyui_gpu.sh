@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Carregar módulos necessários
+module load python3.10.12
+module load cuda/11.8.0  # Ajuste conforme a versão do CUDA no cluster
+
 # Define variáveis
 REPO_URL="https://github.com/comfyanonymous/ComfyUI.git"
 HF_TOKEN="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"  # Substitua pelo seu token Hugging Face
@@ -22,16 +26,18 @@ else
 fi
 source venv/bin/activate
 
+# Atualizar o pip
+echo "Atualizando o pip..."
+pip3 install --upgrade pip
+
 # Instalar dependências
 echo "Instalando dependências..."
-pip3 install --upgrade pip  # Garante que o pip está atualizado
 pip3 install -r requirements.txt
 
-# Instalar PyTorch para CPU
-echo "Instalando PyTorch para CPU..."
+# Instalar PyTorch com suporte à GPU
+echo "Instalando PyTorch com suporte à GPU..."
 pip uninstall -y torch torchvision torchaudio
-pip install torch==2.0.1+cpu torchvision==0.15.2+cpu torchaudio==2.0.2+cpu --index-url https://download.pytorch.org/whl/cpu
-
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
 # Criar diretório de checkpoints, se não existir
 if [ ! -d "./models/checkpoints" ]; then
@@ -45,7 +51,7 @@ fi
 MODEL_PATH="./models/checkpoints/v1-5-pruned-emaonly.ckpt"
 if [ ! -f "$MODEL_PATH" ]; then
     echo "Baixando o modelo do Hugging Face..."
-    wget --header="Authorization: Bearer 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" -O ./models/checkpoints/v1-5-pruned-emaonly.ckpt https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.ckpt
+    wget --header="Authorization: Bearer $HF_TOKEN" -O "$MODEL_PATH" https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.ckpt
     
     # Verificar se o download foi bem-sucedido
     if [ $? -eq 0 ]; then
@@ -58,16 +64,16 @@ else
     echo "Modelo já existe. Pulando esta etapa."
 fi
 
-# Configurar para usar a CPU no ComfyUI
-echo "Forçando o uso de CPU no ComfyUI..."
-MODEL_MANAGEMENT_FILE="./comfy/model_management.py"
+# Configurar para permitir conexões externas no ComfyUI
+echo "Configurando o ComfyUI para aceitar conexões externas..."
+START_FILE="./main.py"
 
-if grep -q "torch.device(torch.cuda.current_device())" "$MODEL_MANAGEMENT_FILE"; then
-    sed -i 's/torch.device(torch.cuda.current_device())/torch.device("cpu")/g' "$MODEL_MANAGEMENT_FILE"
-    echo "Configuração ajustada para usar CPU."
+if ! grep -q "\-\-listen" "$START_FILE"; then
+    sed -i '/if __name__ == "__main__":/a \ \ \ \ parser.add_argument("--listen", action="store_true", help="Allow external connections")' "$START_FILE"
+    echo "Configuração para '--listen' adicionada."
 else
-    echo "Configuração para CPU já estava ajustada."
+    echo "Configuração para '--listen' já existe."
 fi
 
-echo "Processo concluído. Iniciando o ComfyUI."
-python3 main.py
+echo "Processo concluído. Iniciando o ComfyUI com suporte a conexões externas."
+python3 main.py --listen

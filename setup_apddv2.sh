@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Carregar módulos necessários
+module load python3.10.12
+module load cuda/11.8.0  # Ajuste conforme a versão do CUDA no cluster
+
 # Define variáveis
 ZIP_URL="https://drive.google.com/uc?id=1ap5dhuEgpPC5PrJozAu2VFmUNIRZrar2&export=download"
 FOLDER_URL="https://drive.google.com/drive/folders/1AOVKmSqZCW09J_Ypr7KzSYfRxQre-w_m"
