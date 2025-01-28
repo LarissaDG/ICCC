@@ -3,8 +3,8 @@
 # Script para configurar e executar o pipeline APDDv2
 
 # Carregar módulos necessários
-module load python3.10.12
-module load cuda/11.8.0  # Ajuste conforme a versão do CUDA no cluster
+#module load python3.10.12
+#module load cuda/11.8.0  # Ajuste conforme a versão do CUDA no cluster
 
 # Define variáveis
 ZIP_URL="https://drive.usercontent.google.com/download?id=1ap5dhuEgpPC5PrJozAu2VFmUNIRZrar2&export=download&authuser=0"
@@ -16,101 +16,71 @@ OUTPUT_ZIP="APDDv2-images.zip"
 # Atualizar pip e instalar virtualenv, caso necessário
 pip install --upgrade pip virtualenv
 
-# Passo 1: Criar ambiente virtual
+# Passo 1: Criar ambiente virtual, caso não exista
 if [ ! -d "venv" ]; then
-    echo "Criando um ambiente virtual..."
+    echo "Criando ambiente virtual..."
     python3 -m venv venv
-else
-    echo "Ambiente virtual já existe. Pulando esta etapa."
 fi
 source venv/bin/activate
 
-# Instalar o gdown se não estiver disponível
-if ! command -v gdown &> /dev/null
-then
+# Instalar gdown, se necessário
+if ! command -v gdown &> /dev/null; then
     echo "gdown não encontrado. Instalando..."
     pip install gdown
 fi
 
-# Passo 2: Baixar imagens e salvar na pasta APDDv2/APDDv2images
-echo "Verificando a existência do arquivo zip..."
-# Baixar o arquivo zip apenas se ele não existir
-echo "Verificando a existência do arquivo zip..."
+# Passo 2: Baixar o arquivo ZIP se não existir
 if [ ! -f "$OUTPUT_ZIP" ]; then
     echo "Baixando o arquivo do Google Drive..."
     gdown --id "$FILE_ID" -O "$OUTPUT_ZIP"
-    echo "Download concluído: $OUTPUT_ZIP"
-else
-    echo "Arquivo zip já existe, pulando download."
 fi
 
-# Verificar se o comando unzip está disponível
-echo "Verificando a disponibilidade do unzip..."
-if ! command -v unzip &> /dev/null
-then
-    echo "unzip não encontrado. Instalando unzip..."
+# Verificar e instalar unzip, se necessário
+if ! command -v unzip &> /dev/null; then
+    echo "unzip não encontrado. Instalando..."
     sudo apt-get update && sudo apt-get install -y unzip
-else
-    echo "unzip já está instalado."
 fi
 
-# Passo 3: Clonar repositório do GitHub
-echo "Verificando a existência do repositório clonado..."
+# Passo 3: Clonar o repositório do GitHub se não existir
 if [ ! -d "APDDv2" ]; then
-    echo "Clonando o repositório..."
+    echo "Clonando repositório do GitHub..."
     git clone "$REPO_URL"
-else
-    echo "Repositório já existe, pulando clonagem."
 fi
 
-# Descompactar o arquivo zip apenas se a pasta não existir
-echo "Verificando a existência da pasta descompactada..."
+# Passo 4: Descompactar o arquivo ZIP, se a pasta "images" não existir
 if [ ! -d "images" ]; then
-    echo "Descompactando o arquivo zip..."
-    unzip OUTPUT_ZIP -d APDDv2images
-    echo "Imagens movidas para APDDv2/APDDv2images."
+    echo "Descompactando o arquivo ZIP..."
+    unzip "$OUTPUT_ZIP" -d APDDv2images
     mv APDDv2images APDDv2
-else
-    echo "Pasta descompactada já existe, pulando extração."
 fi
 
 cd APDDv2 || exit
 
-# Instalar dependências
+# Instalar dependências, se necessário
 if [ ! -f "requirements_installed" ]; then
     echo "Instalando dependências..."
-    pip3 install -r requirements.txt && touch requirements_installed
-else
-    echo "Dependências já foram instaladas, pulando esta etapa."
+    pip install -r requirements.txt && touch requirements_installed
 fi
 
-# Baixar todos os arquivos do Google Drive apenas se a pasta não existir
-echo "Verificando a existência da pasta de arquivos do Google Drive..."
+# Passo 5: Baixar arquivos do Google Drive, se a pasta não existir
 if [ ! -d "1AOVKmSqZCW09J_Ypr7KzSYfRxQre-w_m" ]; then
     echo "Baixando arquivos do Google Drive..."
-    if ! command -v gdown &> /dev/null
-    then
-        echo "gdown não encontrado. Instalando gdown..."
-        pip3 install gdown
-    fi
     gdown --folder "$FOLDER_URL"
-else
-    echo "Arquivos do Google Drive já foram baixados, pulando esta etapa."
 fi
 
-# Passo 5: Executar scripts eval.py e demo.py
-# Testar no ArtCLIP apenas se eval.py existir
-echo "Verificando e executando eval.py..."
+# Passo 6: Comentar a linha antiga e adicionar a nova linha no demo.py
+echo "Modificando demo.py para usar o novo arquivo de pesos..."
+
+# Comentar a linha original e adicionar a nova linha usando sed
+sed -i 's|score_model = load_model("./modle_weights/1.Score/AesCLIP_reg_weight--e4-train0.4393-test0.6835_best.pth", device)|# score_model = load_model("./modle_weights/1.Score/AesCLIP_reg_weight--e4-train0.4393-test0.6835_best.pth", device)\n    score_model = load_model("./modle_weights/1.Score_reg_weight--e4-train0.4393-test0.6835_best.pth", device)|' demo.py
+
+# Passo 7: Executar eval.py e demo.py, se existirem
 if [ -f "eval.py" ]; then
-    python eval.py || echo "Erro ao executar eval.py. Verifique as dependências."
-else
-    echo "eval.py não encontrado, pulando."
+    echo "Executando eval.py..."
+    python eval.py || echo "Erro ao executar eval.py."
 fi
 
-# Obter pontuação estética apenas se demo.py existir
-echo "Verificando e executando demo.py..."
 if [ -f "demo.py" ]; then
-    python demo.py || echo "Erro ao executar demo.py. Verifique as dependências."
-else
-    echo "demo.py não encontrado, pulando."
+    echo "Executando demo.py..."
+    python demo.py || echo "Erro ao executar demo.py."
 fi
