@@ -9,6 +9,16 @@ ZIP_URL="https://drive.google.com/uc?id=1ap5dhuEgpPC5PrJozAu2VFmUNIRZrar2&export
 FOLDER_URL="https://drive.google.com/drive/folders/1AOVKmSqZCW09J_Ypr7KzSYfRxQre-w_m"
 REPO_URL="https://github.com/BestiVictory/APDDv2.git"
 
+# Criar e ativar um ambiente virtual apenas se ele não existir
+echo "Verificando a existência do ambiente virtual..."
+if [ ! -d "venv" ]; then
+    echo "Criando um ambiente virtual..."
+    python3 -m venv venv
+fi
+echo "Ativando o ambiente virtual..."
+source venv/bin/activate
+
+
 # Baixar o arquivo zip apenas se ele não existir
 echo "Verificando a existência do arquivo zip..."
 if [ ! -f "images.zip" ]; then
@@ -47,15 +57,6 @@ else
 fi
 cd APDDv2 || exit
 
-# Criar e ativar um ambiente virtual apenas se ele não existir
-echo "Verificando a existência do ambiente virtual..."
-if [ ! -d "venv" ]; then
-    echo "Criando um ambiente virtual..."
-    python3 -m venv venv
-fi
-echo "Ativando o ambiente virtual..."
-source venv/bin/activate
-
 # Instalar dependências
 if [ ! -f "requirements_installed" ]; then
     echo "Instalando dependências..."
@@ -93,5 +94,11 @@ if [ -f "demo.py" ]; then
 else
     echo "demo.py não encontrado, pulando."
 fi
+
+#TODO Modelo gerador de descrições
+
+#TODO Modelo gerador de imagens
+
+#TODO análises
 
 echo "Processo concluído."
