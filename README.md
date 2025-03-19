@@ -124,12 +124,7 @@ python3 "<path>/exemple_janus.py" || echo "Erro ao executar exemple_janus.py."
 ## 🚀 Running Experiments  
 To reproduce the experiments, execute:  
 ```bash
-python experiments/run_evaluation.py
-```  
-
-For prompt controllability analysis:  
-```bash
-python experiments/run_prompt_analysis.py
+sbatch oficial_script.sh
 ```  
 
 ## 📊 Results & Analysis  
