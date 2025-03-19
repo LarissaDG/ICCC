@@ -78,14 +78,14 @@ gdown --folder "1AOVKmSqZCW09J_Ypr7KzSYfRxQre-w_m"
 ```
 The models downloaded must be inside the folder: modle_weights. So the folder hierarchy must be similar to:
 
-APDDv2/
-├── APDDv2images/
-│   ├── image1.png
-│   └── image2.png
-├── model_weights/
-│   ├── model_v1.h5
-│   └── model_v2.h5
-└── README.md
+APDDv2/<br>
+├── APDDv2images/<br>
+│   ├── image1.png<br>
+│   └── image2.png<br>
+├── model_weights/<br>
+│   ├── model_v1.h5<br>
+│   └── model_v2.h5<br>
+└── README.md<br>
 
 Now it is time for the settings. First install the requirements:
 
