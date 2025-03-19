@@ -27,6 +27,8 @@ cd /home_cerberus/disk3/larissa.gomide/PKDD
 
 python3 "/home_cerberus/disk3/larissa.gomide/amostra.py" || echo "Erro ao executar amostra.py."
 
+python3 "/home_cerberus/disk3/larissa.gomide/PKDD/manda_email.py" || echo "Erro ao executar manda_email.py."
+
 hostname   # just show the allocated node
 
 echo "Meu job terminou!" 
