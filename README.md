@@ -10,8 +10,8 @@ What each file do? Or is here for?
 
 - .gitgnore: self-explanatory
 - amostra.py: Sample the original database so we can work with an expressive part of the hole, without the computational cost associeated with.
--oficial_script.sh: Automatize running the scripts
--README.md: self-explanatory 
+- oficial_script.sh: Automatize running the scripts
+- README.md: self-explanatory 
 
 ## ⚙️ Setup  
 To set up the environment, there are some phases you must go through.
