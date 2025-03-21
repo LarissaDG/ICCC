@@ -89,8 +89,8 @@ APDDv2/<br>
 │   ├── image1.png<br>
 │   └── image2.png<br>
 ├── model_weights/<br>
-│   ├── model_v1.h5<br>
-│   └── model_v2.h5<br>
+│   ├── model_v1.pth<br>
+│   └── model_v2.pth<br>
 └── README.md<br>
 
 Now it is time for the settings. First install the requirements:
@@ -141,7 +141,6 @@ sbatch oficial_script.sh
 ## 📊 Results & Analysis  
 The results include:  
 - Aesthetic score comparisons across different models.  
-- Correlations between prompt variations and generated image quality.  
 - Insights into prompt engineering techniques for better controllability.  
 
 ## 📜 Citation  
