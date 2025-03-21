@@ -11,8 +11,11 @@ What each file do? Or is here for?
 - **.gitgnore**: self-explanatory
 - **amostra.py**: Sample the original database so we can work with an expressive part of the hole, without the computational cost associeated with.
 - **get_descriptions.py**: Generate the descriptions based on the respective image of the dataset, using Janus 7b. 
+- **get_gen_img.py**: Generate the sintetic data based on the generated description in the script above.
+- **generate_scores.py**: Evaluate the generated images, using the image, only, to assess the different criteria encompassed by the ArtClip model
 - **oficial_script.sh**: Automatize running the scripts
 - **manda_email.py**: In oficial_script may need to change the directory. It's used to notify when the script has finished to run.
+- **metricas.py**: Sum-up the returned scores in order to produce a statistical analysis.
 - **README.md**: self-explanatory 
 - **requirements.txt**: self-explanatory
 

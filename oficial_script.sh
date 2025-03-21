@@ -31,6 +31,10 @@ python3 "/home_cerberus/disk3/larissa.gomide/get_descriptions.py" || echo "Erro 
 
 python3 "/home_cerberus/disk3/larissa.gomide/get_gen_img.py" || echo "Erro ao executar get_gen_img.py."
 
+python3 "/home_cerberus/disk3/larissa.gomide/generate_scores.py" || echo "Erro ao executar generate_scores.py."
+
+python3 "/home_cerberus/disk3/larissa.gomide/metricas.py" || echo "Erro ao executar metricas.py."
+
 python3 "/home_cerberus/disk3/larissa.gomide/PKDD/manda_email.py" || echo "Erro ao executar manda_email.py."
 
 hostname   # just show the allocated node
