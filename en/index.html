@@ -83,15 +83,33 @@
     <div class="section">
       <h3>Project Summary</h3>
       <p>
-        APDDv2-SynAE (Aesthetics of Paintings and Drawings Dataset – Synthetic Aesthetic Evaluation) is an extension of APDDv2, proposed by <a href="https://arxiv.org/abs/2411.08545">(Jin et al., 2024)</a>, developed to investigate and automate the aesthetic analysis of AI-generated images.
+       The APDDv2-SynAE (Aesthetics of Paintings and Drawings Dataset – Synthetic Aesthetic Evaluation) is an extension of the APDDv2, proposed by <a href="https://arxiv.org/abs/2411.08545">(Jin et al., 2024)</a>, developed to investigate and automate the aesthetic analysis of AI-generated images.
 
-        We sampled about 500 images from APDDv2, preserving the statistical relevance of the dataset. Each image was described using DeepSeek Janus, and from these textual descriptions, synthetic images were generated in the same style and content as the originals. The goal was to reproduce original dataset works from their descriptions alone, assuming that generated images should present similar aesthetic scores.
+      For its construction, we performed a sampling of approximately 500 images from APDDv2, preserving the statistical relevance of the set. Each image was described using DeepSeek Janus, and, from these textual descriptions, we generated synthetic images in the same style and content as the originals using two models of different sizes:
+            
+      <ul>
+        <li>SMALL - Deepseek Janus Pro 1B</li>
+        <li>BIG - Deepseek Janus Pro 7B</li>
+      </ul>
 
-        Evaluation was performed using ArtCLIP, a model trained on the original dataset and proposed by APDDv2 authors, allowing comparison of aesthetic criteria between human-made and synthetic images.
+      The goal was to reproduce the works from the original dataset solely from their descriptions, based on the premise that the generated images should present an aesthetic score similar to that of the original work.
 
-        Presented at ICCC (International Conference on Computational Creativity) 2025 via the paper: <a href="https://computationalcreativity.net/iccc25/wp-content/uploads/papers/iccc25-gomide2025automatic.pdf">Automatic Aesthetic Evaluation in Generative Image Models</a>, APDDv2-SynAE expands possibilities for comparative studies between human and AI creations, contributing to computational art and computer vision advances.
+      The evaluation was conducted using ArtCLIP, a model trained on the original dataset and proposed by the APDDv2 authors, enabling the comparison of aesthetic criteria between human and synthetic images.
+
+      Presented at ICCC (International Conference on Computational Creativity) 2025 through the paper: <a href="https://computationalcreativity.net/iccc25/wp-content/uploads/papers/iccc25-gomide2025automatic.pdf">Automatic Aesthetic Evaluation in Generative Image Models</a>, the APDDv2-SynAE expands the possibilities for comparative studies between human-created and AI-generated works, contributing to advancements in computational art and computer vision.
+
       </p>
     </div>
+        
+    <div class="section">
+      <h3>Methodology pipeline</h3>
+      <img 
+        src="https://raw.githubusercontent.com/LarissaDG/ICCC/main/imagens%20site/Pipeline_ICCC_oficial_only.drawio.png" 
+        alt="Pipeline ICCC" 
+        style="max-width:100%; height:auto; display:block; margin:1rem auto;" 
+      />
+    </div>
+
     <div class="section">
       <h3>Presentation video</h3>
       <iframe src="https://www.youtube.com/embed/HAtMM8rXKEU" allowfullscreen></iframe>

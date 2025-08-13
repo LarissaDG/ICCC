@@ -85,13 +85,29 @@
       <p>
       O APDDv2-SynAE (Aesthetics of Paintings and Drawings Dataset – Synthetic Aesthetic Evaluation) é uma extensão do APDDv2, proposto por <a href="https://arxiv.org/abs/2411.08545">(Jin et al., 2024)</a>, desenvolvida para investigar e automatizar a análise estética de imagens geradas por inteligência artificial.
 
-      Para sua construção, realizamos uma amostragem de aproximadamente 500 imagens do APDDv2, preservando a relevância estatística do conjunto. Cada imagem foi descrita utilizando o DeepSeek Janus, e, a partir dessas descrições textuais, geramos imagens sintéticas no mesmo estilo e conteúdo das originais. O objetivo era reproduzir as obras do dataset original apenas a partir de suas descrições, partindo da premissa de que as imagens geradas deveriam apresentar uma pontuação estética semelhante à da obra original.
+      Para sua construção, realizamos uma amostragem de aproximadamente 500 imagens do APDDv2, preservando a relevância estatística do conjunto. Cada imagem foi descrita utilizando o DeepSeek Janus, e, a partir dessas descrições textuais, geramos imagens sintéticas no mesmo estilo e conteúdo das originais usando dois modelos de tamanhos diferentes:
+      
+      <ul>
+        <li>SMALL - Deepseek Janus Pro 1B</li>
+        <li>BIG - Deepseek Janus Pro 7B</li>
+      </ul>
+      
+      O objetivo era reproduzir as obras do dataset original apenas a partir de suas descrições, partindo da premissa de que as imagens geradas deveriam apresentar uma pontuação estética semelhante à da obra original.
 
       A avaliação foi conduzida por meio do ArtCLIP, modelo treinado na base de dados original e proposto pelos autores do APDDv2, permitindo comparar critérios estéticos entre imagens humanas e sintéticas.
 
       Apresentado no ICCC (International Conference on Computational Creativity) 2025 através do paper: <a href="https://computationalcreativity.net/iccc25/wp-content/uploads/papers/iccc25-gomide2025automatic.pdf">Automatic Aesthetic Evaluation in Generative Image Models</a>, o APDDv2-SynAE amplia as possibilidades de estudo comparativo entre criações humanas e produzidas por IA, contribuindo para avanços em arte computacional e visão computacional.
 
       </p>
+    </div>
+
+    <div class="section">
+      <h3>Ilustração da Metodologia</h3>
+      <img 
+        src="https://raw.githubusercontent.com/LarissaDG/ICCC/main/imagens%20site/Pipeline_ICCC_oficial_only.drawio.png" 
+        alt="Pipeline ICCC" 
+        style="max-width:100%; height:auto; display:block; margin:1rem auto;" 
+      />
     </div>
 
     <div class="section">
