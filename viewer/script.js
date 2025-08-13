@@ -36,7 +36,7 @@ function showPrev() {
 document.getElementById('next-btn').addEventListener('click', showNext);
 document.getElementById('prev-btn').addEventListener('click', showPrev);
 
-Papa.parse("dataset/metadata/sampled_BIG_with_gen_scored.csv", {
+Papa.parse("../dataset/metadata/sampled_BIG_with_gen_scored.csv", {
   download: true,
   header: true,
   complete: function(results) {
