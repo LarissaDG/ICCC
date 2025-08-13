@@ -7,62 +7,81 @@ const bigCSV   = "https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/
 const smallBase = "https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/images/generated_oficial_small/";
 const bigBase   = "https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/images/generated_oficial_big/";
 
-function loadDataset() {
-  Papa.parse(smallCSV, {
-    download: true,
-    header: true,
-    skipEmptyLines: "greedy",
-    complete: function(resultsSmall) {
-      const smallData = resultsSmall.data
-        .filter(item => item.generated_filename && item.Description)
-        .map(item => {
-          const fileName = String(item.generated_filename).split(/[\\/]/).pop();
-          return {
-            filename: fileName,
-            small: smallBase + fileName,
-            description: String(item.Description).trim(),
-            big: null // será preenchido depois
-          };
-        });
-
-      // Agora carrega o BIG
-      Papa.parse(bigCSV, {
-        download: true,
-        header: true,
-        skipEmptyLines: "greedy",
-        complete: function(resultsBig) {
-          const bigData = resultsBig.data
-            .filter(item => item.generated_filename)
-            .map(item => {
-              const fileName = String(item.generated_filename).split(/[\\/]/).pop();
-              return {
-                filename: fileName,
-                big: bigBase + fileName
-              };
-            });
-
-          // Mescla os dados pelo filename
-          data = smallData.map(smallItem => {
-            const bigItem = bigData.find(b => b.filename === smallItem.filename);
-            return {
-              small: smallItem.small,
-              big: bigItem ? bigItem.big : "",
-              description: smallItem.description
-            };
-          });
-
-          currentIndex = 0;
-          updateCarousel();
-        },
-        error: function(err) {
-          console.error("Erro ao carregar CSV BIG:", err);
-        }
-      });
-    },
-    error: function(err) {
-      console.error("Erro ao carregar CSV SMALL:", err);
-    }
+// helper: Papa.parse com Promise
+function parseCSV(url) {
+  return new Promise((resolve, reject) => {
+    Papa.parse(url, {
+      download: true,
+      header: true,
+      skipEmptyLines: "greedy",
+      complete: (res) => resolve(res.data || []),
+      error: (err) => reject(err),
+    });
   });
+}
+
+// extrai o ID numérico do nome do arquivo (funciona para img_small_123.jpg e img_big_123.jpg)
+function extractIdFromPath(path) {
+  const file = String(path).split(/[\\/]/).pop() || "";
+  // tenta padrão img_small_123.jpg ou img_big_123.png etc.
+  let m = file.match(/img_(?:small|big)_(\d+)\.(?:jpg|jpeg|png|webp)$/i);
+  if (m) return m[1];
+  // fallback: pega o último número antes da extensão
+  m = file.match(/(\d+)(?=\.(?:jpg|jpeg|png|webp)$)/i);
+  return m ? m[1] : null;
+}
+
+async function loadDataset() {
+  try {
+    // carrega ambos ao mesmo tempo
+    const [smallRows, bigRows] = await Promise.all([parseCSV(smallCSV), parseCSV(bigCSV)]);
+
+    // monta mapas por ID
+    const smallMap = new Map();
+    for (const row of smallRows) {
+      if (!row.generated_filename || !row.Description) continue;
+      const id = extractIdFromPath(row.generated_filename);
+      if (!id) continue;
+      const fileName = String(row.generated_filename).split(/[\\/]/).pop();
+      smallMap.set(id, {
+        url: smallBase + fileName,
+        desc: String(row.Description).trim(),
+      });
+    }
+
+    const bigMap = new Map();
+    for (const row of bigRows) {
+      if (!row.generated_filename) continue;
+      const id = extractIdFromPath(row.generated_filename);
+      if (!id) continue;
+      const fileName = String(row.generated_filename).split(/[\\/]/).pop();
+      bigMap.set(id, {
+        url: bigBase + fileName,
+      });
+    }
+
+    // une apenas IDs que existem nos dois (para garantir par completo)
+    const ids = [...smallMap.keys()].filter((id) => bigMap.has(id));
+    ids.sort((a, b) => Number(a) - Number(b)); // ordena por ID numérica
+
+    data = ids.map((id) => ({
+      small: smallMap.get(id).url,
+      big: bigMap.get(id).url,
+      description: smallMap.get(id).desc, // descrição pode vir do SMALL (ou BIG; são iguais)
+    }));
+
+    currentIndex = 0;
+    updateCarousel();
+
+    if (data.length === 0) {
+      console.warn("Nenhum par SMALL/BIG correspondente encontrado. Verifique os CSVs.");
+    } else {
+      console.log(`Pares carregados: ${data.length}`);
+      console.log("Exemplo:", data[0]);
+    }
+  } catch (e) {
+    console.error("Erro ao carregar datasets:", e);
+  }
 }
 
 function updateCarousel() {
@@ -70,6 +89,8 @@ function updateCarousel() {
   const imgBig   = document.getElementById("image-big");
   const desc     = document.getElementById("image-description");
   const progress = document.getElementById("progress");
+
+  if (!imgSmall || !imgBig || !desc || !progress) return;
 
   if (data.length === 0) {
     imgSmall.src = "";
@@ -87,18 +108,24 @@ function updateCarousel() {
 }
 
 function showNext() {
-  if (data.length === 0) return;
+  if (!data.length) return;
   currentIndex = (currentIndex + 1) % data.length;
   updateCarousel();
 }
 
 function showPrev() {
-  if (data.length === 0) return;
+  if (!data.length) return;
   currentIndex = (currentIndex - 1 + data.length) % data.length;
   updateCarousel();
 }
 
 document.getElementById("next-btn").addEventListener("click", showNext);
 document.getElementById("prev-btn").addEventListener("click", showPrev);
+
+// navegação por teclado
+window.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight") showNext();
+  if (e.key === "ArrowLeft") showPrev();
+});
 
 loadDataset();
