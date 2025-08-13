@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+type: conference-paper
+message: "If you use this project in your research, please cite it as indicated below."
+
+authors:
+  - family-names: Gomide
+    given-names: Larissa
+    orcid: "https://orcid.org/0009-0009-9690-7603" 
+  - family-names: Ferreira
+    given-names: Lucas
+  - family-names: Meira
+    given-names: Wagner
+    orcid: "https://orcid.org/0000-0002-2614-2723" 
+
+conference:
+  name: "Proceedings of the ICCC 2025"
+  location: "Unicamp | Campinas, São Paulo, Brazil"  
+  date-start: 2025-06-23            
+  date-end: 2025-06-27              
+year: 2025
+
+title: "Automatic Aesthetic Evaluation in Generative Image Models"
+version: "1.0.0"
+doi: "10.0000/zenodo.xxxxxxx" # coloque aqui seu DOI, se tiver
+url: "https://computationalcreativity.net/iccc25/wp-content/uploads/papers/iccc25-gomide2025automatic.pdf"
+date-released: 2025-08-12
+repository-code: "https://github.com/LarissaDG/ICCC"
+
+preferred-citation:
+  type: bibtex
+  value: |
+    @inproceedings{gomide2025iccc,
+      title={Automatic Aesthetic Evaluation and Prompt Controllability in Generative Image Models},
+      author={Larissa Gomide and Lucas Nascimento Ferreira and Wagner Meira Jr.},
+      booktitle={Proceedings of the ICCC 2025},
+      year={2025}
+    }
