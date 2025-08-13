@@ -144,15 +144,29 @@ The results include:
 - Insights into prompt engineering techniques for better controllability.  
 
 ## 📜 Citation  
-If you use this code, please cite our work:  
+If you use this code, please cite our work:
+
 ```
-@inproceedings{yourname2025iccc,
-  title={Automatic Aesthetic Evaluation and Prompt Controllability in Generative Image Models},
-  author={Your Name and Co-authors},
-  booktitle={Proceedings of the ICCC 2025},
-  year={2025}
-}
+@inproceedings{gomide2025iccc,
+      title={Automatic Aesthetic Evaluation and Prompt Controllability in Generative Image Models},
+      author={Larissa Gomide and Lucas Nascimento Ferreira and Wagner Meira Jr.},
+      booktitle={Proceedings of the ICCC 2025},
+      year={2025}
+    }
 ```  
+
+Or as indicated by the CITATION.cff
+
+## 📄 Repository Licenses
+
+This repository contains different types of content, each with its own license. Please follow the instructions below when using any part of the material.
+
+| Content       | License | How to cite / give credit |
+|---------------|---------|--------------------------|
+| 💻 **Software** | ![MIT License](https://img.shields.io/badge/License-MIT-green) | You must retain credit in the code and redistributions. See the [LICENSE](./LICENSE) file for details. |
+| 🌐 **Website**  | ![CC BY 4.0](https://img.shields.io/badge/License-CC--BY%204.0-blue) | Apply CC BY license to text and images; include credits and citation instructions in the site footer. |
+| 📊 **Dataset**  | ![CC BY 4.0](https://img.shields.io/badge/License-CC--BY%204.0-blue) | Include a `LICENSE` file and a `README` with clear citation instructions and bibliographic references. |
+
 
 ## 📬 Contact  
 For any questions or collaborations, feel free to reach out:  
