@@ -1,50 +1,61 @@
-console.log("Script carregado");
-console.log(document.getElementById("datasetSelect"));
-
 let data = [];
 let currentIndex = 0;
 
-function loadDataset(version) {
-  const csvUrl = version === "BIG"
-    ? "https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/metadata/sampled_BIG_with_gen_scored.csv"
-    : "https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/metadata/sampled_SMALL_with_gen_scored.csv";
-
-  Papa.parse(csvUrl, {
-    download: true,
-    header: true,
-    complete: function(results) {
-      console.log(`Primeira linha do CSV (${version}):`, results.data[0]);
-
-      data = results.data
-        .filter(item => item.generated_filename && item.Description)
-        .map(item => {
-          const fileName = item.generated_filename.split("/").pop();
-          const imageUrl = `https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/images/generated_oficial_${version.toLowerCase()}/${fileName}`;
-          return {
-            image: imageUrl,
-            description: item.Description
-          };
-        });
-
-      currentIndex = 0;
-      updateCarousel();
-    }
-  });
-}
-
 function updateCarousel() {
-  if (data.length > 0) {
-    document.getElementById("carouselImage").src = data[currentIndex].image;
-    document.getElementById("carouselDescription").textContent = data[currentIndex].description;
-  } else {
-    document.getElementById("carouselImage").src = "";
-    document.getElementById("carouselDescription").textContent = "Nenhuma imagem disponível.";
+  const image = document.getElementById('carousel-image');
+  const caption = document.getElementById('carousel-caption');
+  const progress = document.getElementById('progress');
+
+  if (data.length === 0) {
+    caption.textContent = "Nenhuma imagem disponível.";
+    progress.textContent = "0 / 0";
+    image.src = "";
+    image.alt = "";
+    return;
   }
+
+  const item = data[currentIndex];
+  image.src = item.image; // já vem com a URL completa
+  image.alt = item.description;
+  caption.textContent = item.description;
+  progress.textContent = `${currentIndex + 1} / ${data.length}`;
 }
 
-document.getElementById("datasetSelect").addEventListener("change", function() {
-  loadDataset(this.value);
-});
+function showNext() {
+  if (data.length === 0) return;
+  currentIndex = (currentIndex + 1) % data.length;
+  updateCarousel();
+}
 
-// Carrega a versão BIG por padrão ao abrir
-loadDataset("BIG");
+function showPrev() {
+  if (data.length === 0) return;
+  currentIndex = (currentIndex - 1 + data.length) % data.length;
+  updateCarousel();
+}
+
+document.getElementById('next-btn').addEventListener('click', showNext);
+document.getElementById('prev-btn').addEventListener('click', showPrev);
+
+// Link RAW do CSV no GitHub
+const csvUrl = "https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/metadata/sampled_BIG_with_gen_scored.csv";
+
+Papa.parse(csvUrl, {
+  download: true,
+  header: true,
+  complete: function(results) {
+    console.log("Primeira linha do CSV:", results.data[0]);
+
+    data = results.data
+      .filter(item => item.generated_filename && item.Description)
+      .map(item => {
+        const fileName = item.generated_filename.split("/").pop(); // pega só o nome do arquivo
+        const imageUrl = `https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/images/generated_oficial_big/${fileName}`;
+        return {
+          image: imageUrl,
+          description: item.Description
+        };
+      });
+
+    updateCarousel();
+  }
+});
