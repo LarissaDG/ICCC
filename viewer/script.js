@@ -1,23 +1,55 @@
 let data = [];
 let currentIndex = 0;
 
+function loadDataset() {
+  const csvUrl = "https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/metadata/sampled_SMALL_with_gen_scored.csv";
+
+  const smallBase = "https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/images/generated_oficial_small/";
+  const bigBase   = "https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/images/generated_oficial_big/";
+
+  Papa.parse(csvUrl, {
+    download: true,
+    header: true,
+    skipEmptyLines: "greedy",
+    complete: function(results) {
+      data = (results.data || [])
+        .filter(item => item.generated_filename && item.Description)
+        .map(item => {
+          const fileName = String(item.generated_filename).split(/[\\/]/).pop();
+          return {
+            small: smallBase + fileName,
+            big: bigBase + fileName,
+            description: String(item.Description).trim()
+          };
+        });
+
+      currentIndex = 0;
+      updateCarousel();
+    },
+    error: function(err) {
+      console.error("Erro ao carregar CSV:", err);
+    }
+  });
+}
+
 function updateCarousel() {
-  const image = document.getElementById('carousel-image');
-  const caption = document.getElementById('carousel-caption');
-  const progress = document.getElementById('progress');
+  const imgSmall = document.getElementById("image-small");
+  const imgBig   = document.getElementById("image-big");
+  const desc     = document.getElementById("image-description");
+  const progress = document.getElementById("progress");
 
   if (data.length === 0) {
-    caption.textContent = "Nenhuma imagem disponível.";
+    imgSmall.src = "";
+    imgBig.src = "";
+    desc.textContent = "Nenhuma imagem disponível.";
     progress.textContent = "0 / 0";
-    image.src = "";
-    image.alt = "";
     return;
   }
 
   const item = data[currentIndex];
-  image.src = item.image; // já vem com a URL completa
-  image.alt = item.description;
-  caption.textContent = item.description;
+  imgSmall.src = item.small;
+  imgBig.src   = item.big;
+  desc.textContent = item.description;
   progress.textContent = `${currentIndex + 1} / ${data.length}`;
 }
 
@@ -33,29 +65,7 @@ function showPrev() {
   updateCarousel();
 }
 
-document.getElementById('next-btn').addEventListener('click', showNext);
-document.getElementById('prev-btn').addEventListener('click', showPrev);
+document.getElementById("next-btn").addEventListener("click", showNext);
+document.getElementById("prev-btn").addEventListener("click", showPrev);
 
-// Link RAW do CSV no GitHub
-const csvUrl = "https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/metadata/sampled_BIG_with_gen_scored.csv";
-
-Papa.parse(csvUrl, {
-  download: true,
-  header: true,
-  complete: function(results) {
-    console.log("Primeira linha do CSV:", results.data[0]);
-
-    data = results.data
-      .filter(item => item.generated_filename && item.Description)
-      .map(item => {
-        const fileName = item.generated_filename.split("/").pop(); // pega só o nome do arquivo
-        const imageUrl = `https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/images/generated_oficial_big/${fileName}`;
-        return {
-          image: imageUrl,
-          description: item.Description
-        };
-      });
-
-    updateCarousel();
-  }
-});
+loadDataset();

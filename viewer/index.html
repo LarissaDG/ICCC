@@ -1,28 +1,41 @@
-<!DOCTYPE html> 
-<html lang="pt-br">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Visualizador de Dataset</title>
+  <title>Comparador SMALL vs BIG</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+  <script src="script.js" defer></script>
 </head>
 <body>
   <header>
-  <h1>Visualizador de Dataset / Dataset Viewer</h1>
+    <h1>Comparador de Modelos - SMALL vs BIG</h1>
   </header>
-  
-  <div id="carousel-container">
-    <img id="carousel-image" src="" alt="Imagem do dataset" />
-    <p id="carousel-caption">Descrição da imagem</p>
-  </div>
 
-  <div id="carousel-controls">
-    <button id="prev-btn">Anterior</button>
-    <span id="progress">0 / 0</span>
-    <button id="next-btn">Próximo</button>
-  </div>
+  <main>
+    <div id="carousel-container">
+      <div class="image-col">
+        <h2>Modelo SMALL</h2>
+        <img id="image-small" src="" alt="Imagem SMALL" />
+      </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
-  <script src="script.js"></script>
+      <div class="image-col">
+        <h2>Modelo BIG</h2>
+        <img id="image-big" src="" alt="Imagem BIG" />
+      </div>
+
+      <div class="desc-col">
+        <h2>Descrição</h2>
+        <p id="image-description"></p>
+      </div>
+    </div>
+
+    <div id="controls">
+      <button id="prev-btn">Anterior</button>
+      <span id="progress">0 / 0</span>
+      <button id="next-btn">Próximo</button>
+    </div>
+  </main>
 </body>
 </html>
