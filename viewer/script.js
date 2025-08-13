@@ -15,7 +15,7 @@ function updateCarousel() {
   }
 
   const item = data[currentIndex];
-  image.src = `images/${item.filename.trim()}`;
+  image.src = item.image; // já vem com a URL completa
   image.alt = item.description;
   caption.textContent = item.description;
   progress.textContent = `${currentIndex + 1} / ${data.length}`;
@@ -36,14 +36,26 @@ function showPrev() {
 document.getElementById('next-btn').addEventListener('click', showNext);
 document.getElementById('prev-btn').addEventListener('click', showPrev);
 
-Papa.parse("../dataset/metadata/sampled_BIG_with_gen_scored.csv", {
+// Link RAW do CSV no GitHub
+const csvUrl = "https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/metadata/sampled_BIG_with_gen_scored.csv";
+
+Papa.parse(csvUrl, {
   download: true,
   header: true,
   complete: function(results) {
-    data = results.data.filter(item => item.generated_filename && item.Description);
-    updateCarousel();
-    console.log(results.data[0]); // veja o que vem no primeiro item
-    data = results.data.filter(item => item.generated_filename && item.Description);
+    console.log("Primeira linha do CSV:", results.data[0]);
+
+    data = results.data
+      .filter(item => item.generated_filename && item.Description)
+      .map(item => {
+        const fileName = item.generated_filename.split("/").pop(); // pega só o nome do arquivo
+        const imageUrl = `https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/images/generated_oficial_big/${fileName}`;
+        return {
+          image: imageUrl,
+          description: item.Description
+        };
+      });
+
     updateCarousel();
   }
 });
