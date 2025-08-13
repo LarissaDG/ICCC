@@ -1,33 +1,66 @@
 let data = [];
 let currentIndex = 0;
 
+const smallCSV = "https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/metadata/sampled_SMALL_with_gen_scored.csv";
+const bigCSV   = "https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/metadata/sampled_BIG_with_gen_scored.csv";
+
+const smallBase = "https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/images/generated_oficial_small/";
+const bigBase   = "https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/images/generated_oficial_big/";
+
 function loadDataset() {
-  const csvUrl = "https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/metadata/sampled_SMALL_with_gen_scored.csv";
-
-  const smallBase = "https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/images/generated_oficial_small/";
-  const bigBase   = "https://raw.githubusercontent.com/LarissaDG/ICCC/main/dataset/images/generated_oficial_big/";
-
-  Papa.parse(csvUrl, {
+  Papa.parse(smallCSV, {
     download: true,
     header: true,
     skipEmptyLines: "greedy",
-    complete: function(results) {
-      data = (results.data || [])
+    complete: function(resultsSmall) {
+      const smallData = resultsSmall.data
         .filter(item => item.generated_filename && item.Description)
         .map(item => {
           const fileName = String(item.generated_filename).split(/[\\/]/).pop();
           return {
+            filename: fileName,
             small: smallBase + fileName,
-            big: bigBase + fileName,
-            description: String(item.Description).trim()
+            description: String(item.Description).trim(),
+            big: null // será preenchido depois
           };
         });
 
-      currentIndex = 0;
-      updateCarousel();
+      // Agora carrega o BIG
+      Papa.parse(bigCSV, {
+        download: true,
+        header: true,
+        skipEmptyLines: "greedy",
+        complete: function(resultsBig) {
+          const bigData = resultsBig.data
+            .filter(item => item.generated_filename)
+            .map(item => {
+              const fileName = String(item.generated_filename).split(/[\\/]/).pop();
+              return {
+                filename: fileName,
+                big: bigBase + fileName
+              };
+            });
+
+          // Mescla os dados pelo filename
+          data = smallData.map(smallItem => {
+            const bigItem = bigData.find(b => b.filename === smallItem.filename);
+            return {
+              small: smallItem.small,
+              big: bigItem ? bigItem.big : "",
+              description: smallItem.description
+            };
+          });
+
+          currentIndex = 0;
+          updateCarousel();
+        },
+        error: function(err) {
+          console.error("Erro ao carregar CSV BIG:", err);
+        }
+      });
     },
     error: function(err) {
-      console.error("Erro ao carregar CSV:", err);
+      console.error("Erro ao carregar CSV SMALL:", err);
     }
   });
 }
