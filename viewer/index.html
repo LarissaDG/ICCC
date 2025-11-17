@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>ICCC Dataset Viewer – Original vs Small vs Big</title>
+
+    <!-- PapaParse -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- JS -->
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+    <h1>Comparador de Imagens – APDDv2 </h1>
+
+    <div id="carousel" class="three-columns">
+
+        <div class="column">
+            <h3>Original (APDDv2) - Humano</h3>
+            <img id="image-original" src="" alt="Original Image">
+        </div>
+
+        <div class="column">
+            <h3>SMALL – DeepSeek Janus Pro 1B</h3>
+            <img id="image-small" src="" alt="Small Image">
+        </div>
+
+        <div class="column">
+            <h3>BIG – DeepSeek Janus Pro 7B</h3>
+            <img id="image-big" src="" alt="Big Image">
+        </div>
+
+    </div>
+
+    <p id="image-description" class="description"></p>
+
+    <div class="controls">
+        <button id="prev-btn">◀ Anterior</button>
+        <span id="progress">0 / 0</span>
+        <button id="next-btn">Próxima ▶</button>
+    </div>
+
+</body>
+</html>
