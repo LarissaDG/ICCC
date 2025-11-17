@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>APDDv2-SynAE Dataset - Landing Page</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+      color: #222;
+    }
+    header {
+      background: #002244;
+      color: #fff;
+      padding: 2rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    h1 {
+        color: #fff;
+    }
+    h2 {
+      color: #fff;
+    }
+    h3 {
+      color: #002244;
+    }
+  
+    iframe {
+      width: 100%;
+      height: 450px;
+      border: none;
+      border-radius: 10px;
+    }
+    .section {
+      margin-bottom: 2rem;
+    }
+    .button {
+      display: inline-block;
+      padding: 0.6rem 1.2rem;
+      margin-top: 1rem;
+      background: #002244;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    p {
+      text-align: justify;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: #002244;
+      color: #fff;
+      margin-top: 3rem;
+    }
+    footer p {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav style="text-align: right; padding: 0.5rem 2rem;">
+    <a href="../en/index.html" style="color: #fff; margin-right: 1rem;">English</a> | 
+    <a href="../pt/index.html" style="color: #fff; font-weight: bold;">Português</a>
+    </nav>
+    <h1>APDDv2-SynAE</h1>
+    <h2>Uma base de dados para análise estética automatizada</h2>
+  </header>
+  <div class="container">
+    <div class="section">
+      <h3>Resumo do Projeto</h3>
+      <p>
+      O APDDv2-SynAE (Aesthetics of Paintings and Drawings Dataset – Synthetic Aesthetic Evaluation) é uma extensão do APDDv2, proposto por <a href="https://arxiv.org/abs/2411.08545">(Jin et al., 2024)</a>, desenvolvida para investigar e automatizar a análise estética de imagens geradas por inteligência artificial.
+
+      Para sua construção, realizamos uma amostragem de aproximadamente 500 imagens do APDDv2, preservando a relevância estatística do conjunto. Cada imagem foi descrita utilizando o DeepSeek Janus, e, a partir dessas descrições textuais, geramos imagens sintéticas no mesmo estilo e conteúdo das originais usando dois modelos de tamanhos diferentes:
+      
+      <ul>
+        <li>SMALL - Deepseek Janus Pro 1B</li>
+        <li>BIG - Deepseek Janus Pro 7B</li>
+      </ul>
+      
+      O objetivo era reproduzir as obras do dataset original apenas a partir de suas descrições, partindo da premissa de que as imagens geradas deveriam apresentar uma pontuação estética semelhante à da obra original.
+
+      A avaliação foi conduzida por meio do ArtCLIP, modelo treinado na base de dados original e proposto pelos autores do APDDv2, permitindo comparar critérios estéticos entre imagens humanas e sintéticas.
+
+      Apresentado no ICCC (International Conference on Computational Creativity) 2025 através do paper: <a href="https://computationalcreativity.net/iccc25/wp-content/uploads/papers/iccc25-gomide2025automatic.pdf">Automatic Aesthetic Evaluation in Generative Image Models</a>, o APDDv2-SynAE amplia as possibilidades de estudo comparativo entre criações humanas e produzidas por IA, contribuindo para avanços em arte computacional e visão computacional.
+
+      </p>
+    </div>
+
+    <div class="section">
+      <h3>Ilustração da Metodologia</h3>
+      <img 
+        src="https://raw.githubusercontent.com/LarissaDG/ICCC/main/imagens%20site/Pipeline_ICCC_oficial_only.drawio.png" 
+        alt="Pipeline ICCC" 
+        style="max-width:100%; height:auto; display:block; margin:1rem auto;" 
+      />
+    </div>
+
+    <div class="section">
+      <h3>Vídeo da Apresentação</h3>
+      <iframe src="https://www.youtube.com/embed/HAtMM8rXKEU" allowfullscreen></iframe>
+    </div>
+    
+    <div class="section">
+        <h3>Apresentação</h3>
+        <p>
+            O arquivo utilizado para a apresentação do ICCC pode ser acessado no link abaixo.
+        </p>
+        <a href="https://raw.githubusercontent.com/LarissaDG/ICCC/main/presentation/ICCC%20presentation%20short%20(reviwed).pdf" class="button">Acessar a Apresentação</a>
+    </div>
+
+    <div class="section">
+      <h3>Visualizador do Dataset</h3>
+      <p>
+        Navegue por amostras da base de dados através de um carrossel visual interativo.
+      </p>
+      <a href="../viewer/index.html" class="button">Acessar o Visualizador</a>
+    </div>
+
+    <div class="section">
+      <h3>Código-fonte e Repositório</h3>
+      <p>
+        Para acessar o código fonte usado para a criação do dataset e demais experimentos do projeto, acesse o repositório no GitHub.
+      </p>
+      <a href="https://github.com/LarissaDG/ICCC" class="button" target="_blank">Ver no GitHub</a>
+    </div>
+
+    <div class="section">
+      <h3>Na Mídia</h3>
+      <ul>
+        <li><a href="https://dcc.ufmg.br/estetica-de-imagens-por-ia-aluna-do-dcc-ufmg-apresenta-estudo-em-conferencia-internacional/">[Estética de imagens por IA: aluna do DCC/UFMG apresenta estudo em conferência internacional]</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 LDG / Site disponibilizado sob Licença Creative Commons BY. Demais conteúdos vide respectivas licenças.</p>
+  </footer>
+</body>
+</html>
